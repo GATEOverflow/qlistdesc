@@ -1,0 +1,10 @@
+{
+	"name": "QList Description",
+	"description": "Shows question description in question lists if question title is short",
+	"version": "1.0.0",
+	"date": "2016-08-04",
+	"author": "Arjun",
+	"author_uri": "http://armi.in/arjun",
+	"license": "GPLv2",
+	"min_q2a": "1.5"
+}
