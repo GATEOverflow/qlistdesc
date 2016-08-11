@@ -1,24 +1,24 @@
 <?php
 /*
-	Question2Answer by Gideon Greenspan and contributors
-	http://www.question2answer.org/
+   Question2Answer by Gideon Greenspan and contributors
+   http://www.question2answer.org/
 
-	File: qa-plugin/mouseover-layer/qa-mouseover-layer.php
-	Description: Theme layer class for mouseover layer plugin
+   File: qa-plugin/mouseover-layer/qa-mouseover-layer.php
+   Description: Theme layer class for mouseover layer plugin
 
 
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-	More about this license: http://www.question2answer.org/license.php
-*/
+   More about this license: http://www.question2answer.org/license.php
+ */
 
 class qa_html_theme_layer extends qa_html_theme_base
 {
@@ -40,9 +40,9 @@ class qa_html_theme_layer extends qa_html_theme_base
 				$maxlength = qa_opt('qlist_desc_max_len');
 				$minlength = qa_opt('qlist_desc_min_len');
 				if($this->template =='blogs')
-				$result = qa_db_query_sub('SELECT postid, content, title, format FROM ^blogs WHERE postid IN (#)', $postids);
+					$result = qa_db_query_sub('SELECT postid, content, title, format FROM ^blogs WHERE postid IN (#)', $postids);
 				else
-				$result = qa_db_query_sub('SELECT postid, content, format FROM ^posts WHERE postid IN (#)', $postids);
+					$result = qa_db_query_sub('SELECT postid, content, format FROM ^posts WHERE postid IN (#)', $postids);
 				$postinfo = qa_db_read_all_assoc($result, 'postid');
 
 				// Get the regular expression fragment to use for blocked words and the maximum length of content to show
@@ -55,14 +55,14 @@ class qa_html_theme_layer extends qa_html_theme_base
 					if (isset($postinfo[$question['raw']['postid']])) {
 						$thispost = $postinfo[$question['raw']['postid']];
 						$text = qa_viewer_text($thispost['content'], $thispost['format'], array('blockwordspreg' => $blockwordspreg));
-						$text = preg_replace('/\s+/', ' ', $text);  // Remove duplicated blanks, new line characters, tabs, etc
-						$text = qa_shorten_string_line($text, $maxlength);
-				if($this->template =='blogs')
-						$title =  $thispost['title'];
-				else		$title = isset($question['title']) ? $question['title'] : '';
+						$text = htmlspecialchars(preg_replace('/\s+/', ' ', $text));  // Remove duplicated blanks, new line characters, tabs, etc
+						//$text = qa_shorten_string_line($text, $maxlength);
+						if($this->template =='blogs')
+							$title =  $thispost['title'];
+						else		$title = isset($question['title']) ? $question['title'] : '';
 						if(strlen($title) < $minlength){
 							$text = $title.'<br>'. qa_shorten_string_line($text, $maxlength -strlen($title));
-						$q_list['qs'][$index]['title'] = $text;
+							$q_list['qs'][$index]['title'] = $text;
 						}
 					}
 				}
