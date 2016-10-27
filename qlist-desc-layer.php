@@ -36,11 +36,18 @@ class qa_html_theme_layer extends qa_html_theme_base
 
 			if (!empty($postids)) {
 				// Retrieve the content for these questions from the database
-
+				$parts=explode('/',$this->request);
 				$maxlength = qa_opt('qlist_desc_max_len');
 				$minlength = qa_opt('qlist_desc_min_len');
-				if($this->template =='blogs')
+				if($this->template == 'blogs' ||
+						(count($parts) >=1 && $parts[0]=='blog')
+				  )
+
 					$result = qa_db_query_sub('SELECT postid, content, title, format FROM ^blogs WHERE postid IN (#)', $postids);
+			 else if($this->template == 'exams' ||(count($parts) >=1 && $parts[0]=='exam')){
+                                        $result = qa_db_query_sub('SELECT postid, "" as content, "html" as  format FROM ^exams WHERE postid IN (#)', $postids);
+                                }
+
 				else
 					$result = qa_db_query_sub('SELECT postid, content, format FROM ^posts WHERE postid IN (#)', $postids);
 				$postinfo = qa_db_read_all_assoc($result, 'postid');
