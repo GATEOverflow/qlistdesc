@@ -57,22 +57,52 @@ class qa_html_theme_layer extends qa_html_theme_base
 				$blockwordspreg = qa_get_block_words_preg();
 
 				// Now add the popup to the title for each question
+foreach ($q_list['qs'] as $index => $question) {
 
-				foreach ($q_list['qs'] as $index => $question) {
-					if (isset($postinfo[$question['raw']['postid']])) {
-						$thispost = $postinfo[$question['raw']['postid']];
-						$text = qa_viewer_text($thispost['content'], $thispost['format'], array('blockwordspreg' => $blockwordspreg));
-						$text = htmlspecialchars(preg_replace('/\s+/', ' ', $text));  // Remove duplicated blanks, new line characters, tabs, etc
-						//$text = qa_shorten_string_line($text, $maxlength);
-						if($this->template =='blogs')
-							$title =  $thispost['title'];
-						else		$title = isset($question['title']) ? $question['title'] : '';
-						if(strlen($title) < $minlength){
-							$text = $title.'<br>'. qa_shorten_string_line($text, $maxlength -strlen($title));
-							$q_list['qs'][$index]['title'] = $text;
-						}
-					}
-				}
+if (isset($postinfo[$question['raw']['postid']])) {
+
+$thispost = $postinfo[$question['raw']['postid']];
+
+$text = qa_viewer_text($thispost['content'], $thispost['format']);
+
+$text = htmlspecialchars(preg_replace('/\s+/', ' ', $text));  // Remove duplicated blanks, new line characters, tabs, etc
+
+//$text = qa_shorten_string_line($text, $maxlength);
+
+if($this->template =='blogs')
+
+$title =  $thispost['title'];
+
+else $title = isset($question['title']) ? $question['title'] : '';
+
+if(strlen($title) < $minlength){
+
+$text = '<div class="q-content">'. qa_substr($text,0,$maxlength).'...</div>';
+
+$q_list['qs'][$index]['title'] = $title;
+
+$q_list['qs'][$index]['content'] = $text;
+
+}
+
+}
+
+}
+// 				foreach ($q_list['qs'] as $index => $question) {
+// 					if (isset($postinfo[$question['raw']['postid']])) {
+// 						$thispost = $postinfo[$question['raw']['postid']];
+// 						$text = qa_viewer_text($thispost['content'], $thispost['format'], array('blockwordspreg' => $blockwordspreg));
+// 						$text = htmlspecialchars(preg_replace('/\s+/', ' ', $text));  // Remove duplicated blanks, new line characters, tabs, etc
+// 						//$text = qa_shorten_string_line($text, $maxlength);
+// 						if($this->template =='blogs')
+// 							$title =  $thispost['title'];
+// 						else		$title = isset($question['title']) ? $question['title'] : '';
+// 						if(strlen($title) < $minlength){
+// 							$text = $title.'<br>'. qa_shorten_string_line($text, $maxlength -strlen($title));
+// 							$q_list['qs'][$index]['title'] = $text;
+// 						}
+// 					}
+// 				}
 			}
 		}
 
